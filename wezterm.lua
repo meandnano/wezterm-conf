@@ -6,7 +6,7 @@ local act = wezterm.action
 local config = wezterm.config_builder()
 
 -- config.font = wezterm.font("Input Mono Condensed")
-config.font = wezterm.font("Iosevka Term")
+config.font = wezterm.font("IosevkaTerm Nerd Font")
 config.font_size = 18.0
 
 config.hyperlink_rules = wezterm.default_hyperlink_rules()
@@ -21,7 +21,7 @@ config.color_schemes = {
 config.color_scheme = 'bathory-adjust'
 
 config.hide_tab_bar_if_only_one_tab = true
-config.window_decorations = "RESIZE|MACOS_FORCE_DISABLE_SHADOW"
+config.window_decorations = "RESIZE"
 config.window_padding = {
 	left = 0,
 	right = 0,
@@ -84,30 +84,6 @@ config.keys = {
 	-- CTRL-SHIFT-d activates the debug overlay
 	{ key = 'D',          mods = 'CTRL|SHIFT', action = wezterm.action.ShowDebugOverlay },
 }
-
--- Swap Cmd <-> Option on macOS
-if wezterm.target_triple:match("darwin$") then
-	for i = 0, 127 do
-		local key = string.char(i)
-
-		for _, mods in ipairs({ "", "|CTRL", "|SHIFT" }) do
-			if mods == "" and (key == "c" or key == "v") then
-				goto continue
-			end
-			for from, to in pairs({ CMD = "OPT", OPT = "CMD" }) do
-				table.insert(config.keys, {
-					key = key,
-					mods = from .. mods,
-					action = act.SendKey({
-						key = key,
-						mods = to .. mods,
-					}),
-				})
-			end
-			::continue::
-		end
-	end
-end
 
 config.mouse_bindings = {
 	{
